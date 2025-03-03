@@ -1,59 +1,59 @@
-# TODO  Напишите функцию count_letters
-def count_letters(text):
-    text = text.lower()  # Приведение текста к нижнему регистру
-    letter_count = {}
+class Book:
+    """ Базовый класс книги. """
 
-    for i in text:
-        if i.isalpha():  # Проверяем, является ли символ буквой
-            letter_count[i] = letter_count.get(i, 0) + 1
-    return letter_count
+    def __init__(self, name: str, author: str):
+        self._name = name
+        self._author = author
 
-# TODO Напишите функцию calculate_frequency
-def calculate_frequency(letter_count):
-    total_letters = sum(letter_count.values())  # Общее количество букв
-    frequency = {letter: format(count / total_letters, '.2f') for letter, count in letter_count.items()}
-    return frequency
+    @property
+    def name(self):
+        return self._name
 
-main_str = """
-У лукоморья дуб зелёный;
-Златая цепь на дубе том:
-И днём и ночью кот учёный
-Всё ходит по цепи кругом;
-Идёт направо — песнь заводит,
-Налево — сказку говорит.
-Там чудеса: там леший бродит,
-Русалка на ветвях сидит;
-Там на неведомых дорожках
-Следы невиданных зверей;
-Избушка там на курьих ножках
-Стоит без окон, без дверей;
-Там лес и дол видений полны;
-Там о заре прихлынут волны
-На брег песчаный и пустой,
-И тридцать витязей прекрасных
-Чредой из вод выходят ясных,
-И с ними дядька их морской;
-Там королевич мимоходом
-Пленяет грозного царя;
-Там в облаках перед народом
-Через леса, через моря
-Колдун несёт богатыря;
-В темнице там царевна тужит,
-А бурый волк ей верно служит;
-Там ступа с Бабою Ягой
-Идёт, бредёт сама собой,
-Там царь Кащей над златом чахнет;
-Там русский дух… там Русью пахнет!
-И там я был, и мёд я пил;
-У моря видел дуб зелёный;
-Под ним сидел, и кот учёный
-Свои мне сказки говорил.
-"""
+    @property
+    def author(self):
+        return self._author
 
-# TODO Распечатайте в столбик букву и её частоту в тексте
-letter_count = count_letters(main_str)
-frequencies = calculate_frequency(letter_count)
-for letter, freq in frequencies.items():
-    print(f"{letter}: {freq}")
+    def __str__(self):
+        return f"Книга {self.name}. Автор {self.author}"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name!r}, author={self.author!r})"
 
 
+class PaperBook(Book):
+    def __init__(self, name: str, author: str, pages: int):
+        super().__init__(name, author)
+        self.pages = pages
+
+    @property
+    def pages(self):
+        return self._pages
+
+    @pages.setter
+    def pages(self, value: int):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError("Количество страниц должно быть положительным целым числом.")
+        self._pages = value
+
+    def __str__(self):
+        return f"Книга {self.name}. Автор {self.author}. Страницы {self.pages}"
+
+
+class AudioBook(Book):
+    def __init__(self, name: str, author: str, duration: float):
+        super().__init__(name, author)
+        self.duration = duration
+
+    @property
+    def duration(self):
+        return self._duration
+
+    @duration.setter
+    def duration(self, value: float):
+        if not isinstance(value, (float, int)) or value <= 0:
+            raise ValueError("Продолжительность аудиокниги должна быть положительным числом.")
+        self._duration = float(value)
+
+    def __str__(self):
+        return f"Книга {self.name}. Автор {self.author}. Длительность {self.duration} часов"
+    
